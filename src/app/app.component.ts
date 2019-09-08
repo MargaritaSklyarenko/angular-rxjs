@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Observable, Observer, of, from, fromEvent, timer, interval, range, empty, throwError } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,7 @@ export class AppComponent {
   title = 'angular-ngrx';
 
   constructor() {
-    this.secondLesson();
+    this.thirdLesson();
   }
 
   firstLesson() {
@@ -35,6 +36,16 @@ export class AppComponent {
     //const o = range(0, 100);
     //const o = empty();
     const o = throwError("Err");
+    o.subscribe({
+      next: (value: any) => console.log('Next:', value),
+      complete: () => console.log("Complete!"),
+      error: (error) => console.log('Error', error)
+    });
+  }
+
+  thirdLesson() {
+    const o = range(0, 100).pipe(filter(number => number > 50));
+    
     o.subscribe({
       next: (value: any) => console.log('Next:', value),
       complete: () => console.log("Complete!"),
