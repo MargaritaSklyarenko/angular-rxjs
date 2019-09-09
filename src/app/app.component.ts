@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Observable, Observer, of, from, fromEvent, timer, interval, range, empty, throwError } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { Observable, Observer, of, from, fromEvent, timer, interval, range, empty, throwError, combineLatest, zip, forkJoin } from 'rxjs';
+import { filter, take, concat, merge } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +11,7 @@ export class AppComponent {
   title = 'angular-ngrx';
 
   constructor() {
-    this.thirdLesson();
+    this.fourthLesson();
   }
 
   firstLesson() {
@@ -46,6 +46,23 @@ export class AppComponent {
   thirdLesson() {
     const o = range(0, 100).pipe(filter(number => number > 50));
     
+    o.subscribe({
+      next: (value: any) => console.log('Next:', value),
+      complete: () => console.log("Complete!"),
+      error: (error) => console.log('Error', error)
+    });
+  }
+
+  fourthLesson() {
+    const o1 = timer(0, 1000).pipe(take(3));
+    const o2 = timer(0, 100).pipe(take(3));
+
+    //const o = combineLatest(o1, o2);
+    //const o = zip(o1, o2);
+    //const o = forkJoin(o1, o2);
+    //const o = o1.pipe(concat(o2));
+    const o = o1.pipe(merge(o2));
+
     o.subscribe({
       next: (value: any) => console.log('Next:', value),
       complete: () => console.log("Complete!"),
